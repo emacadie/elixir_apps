@@ -1,0 +1,97 @@
+To work w/Elixir on my machine:
+ELIXIR_DIR=/home/ericm/tmp/elixir/elixir/bin
+PATH=$ELIXIR_DIR:$PATH
+
+https://elixir-lang.org/docs.html
+
+iex brings up interactive mode
+command line has a counter
+
+Numbers:
+"5 + 5" gives "10"
+"5 * 5" gives "25"
+"i 5 * 5" gives answer and type (integer)
+You could also do:
+b = 5 * 5
+i b
+Tells you it's an integer.
+I think "i" means "inspect"
+"i 10/5" gives a float
+"div(10, 5)" returns an integer
+
+we can enter hex:
+0xff
+For binary:
+0b1111
+exponential syntax:
+2.0e2 is 200.0
+2.0e-3 is 0.002
+You can put underscores in numbers:
+one_billion = 1_000_000_000
+It still displays in the prompt as "1000000000"
+So I guess Elixir people like snake case
+No max number for integer (limit is 2.1 billion in C#, or 2_100_000_000)
+1 quintillion (1 w/18 zeroes)
+Exponents:
+https://stackoverflow.com/questions/32024156/how-do-i-raise-a-number-to-a-power-in-elixir
+Perhaps use Elixir for math?
+(although I have heard that Erlang VM is not good for that)
+
+
+Atoms:
+https://hexdocs.pm/elixir/Atom.html#content
+A constant where its name is also its value
+A colon and its name
+:firstname
+:"this is also an atom"
+IO.puts to print it
+gives atom :ok
+to let us know it was okay
+:error is another common one
+They come in return values, which are tuples, like in Go
+A function could return:
+{:ok, content}
+or 
+{:error, reason}
+They are memory efficient.
+I think Clojure keywords can hold a value
+In Elixir, they are mapped to integers
+Boolean atoms are :true and :false
+You can eliminate colon for those
+:nil can also be used without the leading colon
+
+Strings:
+https://hexdocs.pm/elixir/String.html#content
+UTF8
+combine strings with/ operator "<>"
+hello = "Hello, "
+name = "Big Jim"
+hello <> name
+That will take a lot of getting used to.
+
+What about put a value in middle of string:
+String interpolation
+handle = "some_handle"
+"My twitter handle is @#{handle}. Feel free to send me a message."
+
+one = 1
+"Test: #{one}"
+prints : "Test: 1"
+If you do:
+numbers = [1, 2, 3]
+"Test #{numbers}"
+You get:
+<<84, 101, 115, 116, 32, 1, 2, 3>>
+This is the Ascii codes for letters in "Test"
+Why does it do that for list? He doesn't really say
+Add a null byte to the end:
+iex(25)> "one" <> <<0>>
+<<111, 110, 101, 0>>
+So I guess "<<" and ">>" are used to working with bytes
+
+Tuples:
+https://hexdocs.pm/elixir/Tuple.html#content
+An ordered collection, up to about 4 elements
+Some functions return tuples, like Go
+
+
