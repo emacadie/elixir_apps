@@ -2,6 +2,13 @@ To work w/Elixir on my machine:
 ELIXIR_DIR=/home/ericm/tmp/elixir/elixir/bin
 PATH=$ELIXIR_DIR:$PATH
 
+To do it interactively in emacs:
+M-x shell
+cd /home/ericm/tmp/elixir/elixir/bin
+PATH=$PATH:`pwd`
+
+In interactive shell, to do previous commands, C-<up-arrow>
+
 https://elixir-lang.org/docs.html
 
 iex brings up interactive mode
@@ -93,5 +100,104 @@ Tuples:
 https://hexdocs.pm/elixir/Tuple.html#content
 An ordered collection, up to about 4 elements
 Some functions return tuples, like Go
+book = {"Programming Elixir", "Dave Thomas", 25.00}
+You can have multiple data types: numbers, strings, atoms
+Use "elem" function to get items, 0-based
+To get price from book tuple, do:
+elem( book, 2 )
+to update, use put_elem:
+put_elem( book, 2, 48.00)
+It creates a new tuple (so it's immutable)
+Of course, we could do: 
+book = put_elem( book, 2, 48.00)
+"=" is matching, not assigning
+Elixer matches a w/ 1 + 1 if we do:
+a = 1 + 1
+We could match w/tuples:
+{title1, author1, price1} = book
+Elixir "matches" everything on left to what is on right
+(This sounds like assignment, but I will go with it for now)
+
+What if we just want some of the elements?
+Use underscore
+{title2, author2, _} = book
+Sort of like Go
+
+Lists:
+options[:notify_user]
+Better data structures if more elements
+Do not need to be same type
+first_list = [1, 2, 3]
+second_list = [:ok, 1, "test", first_list]
+Lists have a head and a tail
+hd(first_list)
+tl(first_list)
+Sort of like "car" and "cdr", but with better names
+You can also use the pipe operator to create lists
+third_list = [ 1 | [2, 3] ]
+That gives "[1, 2, 3]"
+fourth_list = [1 | [2 | [3 | []]]]
+You need that empty list in there.
+So you are pre-pending to lists
+Lists are singly-linked
+Getting 1-millionth item from list can be slow
+Faster to put item on head of list than tail
+Is Lisp like this? Perhaps Lisp got something wrong.
+But Clojure has vectors.
+Untyped arrays are slow in Racket. They recommend using Typed Racket.
+Racket vectors are fixed-length
+Pattern matching with lists:
+[a, b, c] = [1, 2, 3]
+Now a is 1, b is 2, c is 3
+[head | tail ] = [1, 2, 3]
+Now "head" is 1, and "tail" is [2, 3]
+Special type of list: keyword list
+options = [{:is_active, false}, {:notify_user, true}, {:create_if_not_exists, true}]
+(this looks like a map to me)
+Then you can get a value like this:
+options[:notify_user]
+
+Immutability
+Once a list is created, it will not change
+To add to a list, you 
+languages = ["Elixir", "C#", "JavaScript"]
+List.insert_at(languages, 0, "C++")
+That returns: ["C++", "Elixir", "C#", "JavaScript"]
+But languages still has: ["Elixir", "C#", "JavaScript"]
+It takes the head, and then makes a pointer to the original list
+Benefits: 
+1. Good for concurrency
+2. Efficient memory use
+
+If you do:
+counter = 1
+then 
+counter = counter + 1
+You are actually "re-binding" counter to new data.
+Honestly, that sounds mutable to me.
+
+Maps
+https://hexdocs.pm/elixir/Map.html#content
+Key/value pairs
+The key does not have to be an atom, only one instance of each key
+In a keyword list, apparently you can use the same key multiple times
+Maps can have any type
+first_map = %{"one" => :one, 3 => "three"}
+my_map = %{1 => {"Nate", "Taylor", "his.email@gmail.com"}, 2 => {"Charles", "Otherdude", "other.dude@gmail.com"}}
+
+A tuple can be a key
+other_map = %{:names => ["Nate Tyler", "Charles Smidgen"], "gender" => "male"}
+another_map = %{{:ok, 1} => true, {:ok, 2} => false}
+You can get values like this:
+other_map["gender"]
+other_map[:names]
+If the key is an atom, you can call it directly:
+other_map.names
+Pattern matching:
+%{:names => names_list} = other_map
+Then names_list gives:
+["Nate Tyler", "Charles Smidgen"]
+It matches on the key and gets the value
+
 
 
