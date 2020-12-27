@@ -199,5 +199,217 @@ Then names_list gives:
 ["Nate Tyler", "Charles Smidgen"]
 It matches on the key and gets the value
 
+-- ------------------
+Module about modules
+.exs files are scripts run in memory
+.ex files are compiled by Erlang runtime into BEAM files
+
+defmodule is a macro
+
+File is "module_playground.exs"
+with module ModulePlayground
+To run, make sure iex is on path
+then:
+"iex module_playground.exs"
+In shell, type module name and function name:
+ModulePlayground.say_here
+To reload changes, in iex:
+"r(ModulePlayground)"
+Later: "r(Sample.Enum)"
+Module directives:
+import directive - include module functions
+We have to say "IO.puts"
+or we can just say:
+"import IO" at top under "defmodule" line, and just use "puts" in code
+We could also do this:
+import IO, only: [puts: 1]
+The "1" is the "arity", which means that it takes one arg
+
+https://hexdocs.pm/elixir/Kernel.html is imported into every module implicitly,
+like java.lang
+So if we make a function called "inspect", it will conflict with Kernel.inspect
+But we can do this to exclude it:
+import Kernel, except: [inspect: 1]
+
+We made a new file, so we need to import it in iex:
+import_file("misc_util_math.exs")
+Can we have iex scan a directory?
+
+String.downcase("LOUD TO QUIET")
+"loud to quiet"
+String.downcase "LOUD TO QUIET"
+also gives "loud to quiet"
+I prefer languages that are consistent.
+
+alias directive used for shortening names
+
+require directive: Brings macro into module
+
+Functions:
+No return statement
+Functions return last evaluated expression
+Our function Sample.Enum.first takes one argument
+In Elixir notation, that is: first/1
+
+Matching: 
+In Sample.Enum, we had this:
+  def first( [] ) do
+    nil
+  end
+
+  # we had [head | tail] and we did not use "tail"
+  # so we got a warning
+  def first( [head | _] ) do
+    head
+  end
+
+We could replace them with this:
+def first([]), do: nil
+def first([head|_]), do: head
+
+We could pattern match on tuples:
+Remember our book tuple from before:
+book = {"Programming Elixir", "Dave Thomas", 25.00}
+We could do this:
+def some_func(quantity, {_, _, price} ) do
+    quantity * price
+end
+Same function without pattern matching:
+def some_func( quantity, book ) do
+    quantity * elem( book, 2)
+end
+
+Guard clauses:
+In Sample.Enum, we could do this to check for an empty list:
+def first_again(list) when length(list) == 0, do: nil
+If the list is not nil, it will go to the next "first_again":
+def first_again([head | _ ]), do: head
+
+Look at calendar.exs: Clean way to do leap year
+So it looks like if you can multiple functions with same name and arity, and Elixir will execute them in order.
+We could do this:
+import_file("calendar.exs")
+or this to compile:
+c("calendar.exs")
+Available in guard clauses:
+Operators: 
+Comparison: ==, !=, ===, !==, >, >=, <, <=
+Boolean: and, or, not
+Arithmatic: +, -, *, /
+Binary concat operator: <>
+"in" operator if right side is range or list
+Type check functions:
+is_atom, is_binary, is_bitstring, is_boolean, is_float, is_function, is_integer, is_list, is_map, is_nil, is_number, is_pid, is_port, is_reference, is_tuple
+Additional functions:
+abs(number), 
+binary_part
+bit_size
+byte_size
+div
+elem
+hd
+length
+map_size
+node()
+node(pid|ref|port)
+rem
+round
+self()
+tl
+trunc
+tuple_size
+
+Default parameters:
+In sample_enum.exs:
+  # if "0" is default value for val
+  def add(list, val \\ 0 ) do
+    [val | list]
+  end
+In the shell:
+iex(13)> Sample.Enum.add([1, 2])
+[0, 1, 2]
+iex(14)> Sample.Enum.add([1, 2], :ll)
+[:ll, 1, 2]
+iex(15)> 
+
+So what can we do with "first"?
+def first([], val \\ nil), do: nil
+This might cause an error since the second takes one arg instead of two.
+So switch the order.
+So functions have to be in order of increasing arity as well
+
+Private functions:
+Function to print second arg to "add"
+"defp" macro instead of "def"
+Trying to call it in iex gives this:
+Sample.Enum.trace("hhh")
+** (UndefinedFunctionError) function Sample.Enum.trace/1 is undefined or private
+    Sample.Enum.trace("hhh")
+
+Functions as first-class citizens:
+Functions can be passed as args to other functions, returned from functions, and assigned as variables
+Will we see map, filter, reduce?
+Will use stuff from Enum module:
+https://hexdocs.pm/elixir/Enum.html#content
+Enum works with datatype that implements the Enumerable protocol:
+https://hexdocs.pm/elixir/Enumerable.html
+Will he go over protocols?
+
+Map function:
+iex(19)> c("sample_utils.exs")
+[Sample.Utils]
+iex(20)> Sample.Utils.square(8)
+64
+iex(21) my_list = [1,2,3,4]
+[1, 2, 3, 4]
+iex(22)> Enum.map(my_list, &Sample.Utils.square/1)
+[1, 4, 9, 16]
+This will give an error:
+iex(23)> Enum.map(my_list, &Sample.Utils.square)
+** (CompileError) iex:23: invalid args for &, expected an expression in the format of &Mod.fun/arity, &local/arity or a capture containing at least one argument as &1, got: Sample.Utils.square()
+    (stdlib 3.13.2) lists.erl:1358: :lists.mapfoldl/3
+    (stdlib 3.13.2) lists.erl:1359: :lists.mapfoldl/3
+
+You need the ampersand, and the arity
+
+Here is reduce:
+iex(4)> Enum.reduce( my_list, 0, &Sample.Utils.sum/2)
+10
+iex(5)> Enum.reduce( my_list, 1, &Sample.Utils.sum/2)
+11
+Reduce needs a function w/arity of 2
+
+Anonymous functions
+Useful for the Big Three
+iex(6)> Enum.map(my_list, fn(x) -> x * x end)
+[1, 4, 9, 16]
+everything between arrow and "end" is the function.
+Can we have multiple statements? Could we use ";" to separate lines?
+iex(7)> Enum.reduce(my_list, 0, fn(x, acc) -> acc + x end)
+10
+We can also do this:
+iex(9)> Enum.reduce(my_list, 1, fn(x, acc) -> acc + x end)
+11
+
+We can also do this w/the "capture operator":
+iex(10)> Enum.map(my_list, &(&1 * &1))
+[1, 4, 9, 16]
+iex(11)> Enum.reduce(my_list, 0, &(&1 + &2))
+10
+
+Multiple ways to do it.
+
+How to use a function in one of our functions?
+See "custom_func" in Sample.Utils:
+iex(13)> Sample.Utils.custom_func(1, fn(x) -> IO.puts(x) end)
+Calling func f with param: 1
+1
+:ok
+iex(15)> Sample.Utils.custom_func("hello", fn(x) -> IO.puts(x) end)
+Calling func f with param: hello
+hello
+:ok
+
+
 
 
