@@ -410,6 +410,75 @@ Calling func f with param: hello
 hello
 :ok
 
+Control flow:
+If, cond, case, recursion (no loops in Elixir)
 
+If/else
+See Sample.Enum for that
+We can do if/else or unless
+unless can take an else, but avoid it.
+
+you can see an AST in iex by doing this:
+quote do if length(list) == 0, do: nil, else: hd(list) end
+iex(12)> quote do if length(list) == 0, do: nil, else: hd(list) end
+{:if, [context: Elixir, import: Kernel],
+ [
+   {:==, [context: Elixir, import: Kernel],
+    [{:length, [context: Elixir, import: Kernel], [{:list, [], Elixir}]}, 0]},
+   [
+     do: nil,
+     else: {:hd, [context: Elixir, import: Kernel], [{:list, [], Elixir}]}
+   ]
+ ]}
+
+There is not "else if" in Elixir. To do that, you would need to nest. Possibly a lot.
+Use "cond" for that.
+"cond" is a macro
+Each condition is boolean.
+The condition could be multiple lines.
+There does not seem to be a default in cond.
+You can put a final true case
+We could also do the same with pattern matching. See Sample.Calendar.
+
+Case:
+See Sample.Calendar
+Includes default.
+
+Recursion: Used to iterate over a list
+In sample_enum, we implement map using recursion
+iex(34)> c("sample_enum.exs")
+[Sample.Enum]
+iex(35)> Sample.Enum.map([1,2,3], &(&1 * 2))
+[2, 4, 6]
+iex(36)> 
+
+Elixir has ranges:
+1..100
+
+For recursion, they have a module that does 100 bottles of beer
+with some overloaded functions:
+defp get_sentence(2) do
+     .. stuff here
+end
+
+defp get_sentence(1) do
+     .. stuff here
+end
+
+defp get_sentence(number) do
+     .. stuff here
+end
+
+So you can overload functions with specific arg values
+"defp" is a macro, so maybe you cannot do that with functions, just macros
+Stay tuned
+
+Tail recursion:
+When the last operation in a function is a recursive call
+No call is caused to call stack.
+Made reverse and other_map in Sample.Enum to show tail recursion
+iex(44)> Sample.Enum.other_map([1,2,3], &(&1 * 2))
+[2, 4, 6]
+iex(45)> 
 
 
