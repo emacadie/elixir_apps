@@ -10,6 +10,9 @@ PATH=$PATH:`pwd`
 In interactive shell, to do previous commands, C-<up-arrow>
 
 https://elixir-lang.org/docs.html
+https://hexdocs.pm
+Package directory at https://hex.pm
+
 
 iex brings up interactive mode
 command line has a counter
@@ -480,5 +483,107 @@ Made reverse and other_map in Sample.Enum to show tail recursion
 iex(44)> Sample.Enum.other_map([1,2,3], &(&1 * 2))
 [2, 4, 6]
 iex(45)> 
+
+ecosystem:
+mix, like maven or gradle
+"mix help" lists all the commands. There are about 40 of them.
+default task: mix run
+differenct packages can give new mix commands, like some for Credo (static analysis tool)
+
+App names must be snake case
+
+Location: /home/ericm/tmp/elixir/elixir/lib/mix/ebin
+ericm@latitude:~/github/elixir_apps$ mix new pluralsight_tweet --sup
+* creating README.md
+* creating .formatter.exs
+* creating .gitignore
+* creating mix.exs
+* creating lib
+* creating lib/pluralsight_tweet.ex
+* creating lib/pluralsight_tweet/application.ex
+* creating test
+* creating test/test_helper.exs
+* creating test/pluralsight_tweet_test.exs
+
+Your Mix project was created successfully.
+You can use "mix" to compile it, test it, and more:
+
+    cd pluralsight_tweet
+    mix test
+
+Run "mix help" for more commands.
+
+--sup gives a supervisor
+supervisor vs umbrella:
+supervisor: watches a process and restarts if it crashes
+Erlang does telecom; philosophy is "let it crash"
+
+Umbrella project: Has other projects underneath it
+
+Hex has package manager, like gems
+hex.pm has directory
+
+He seems to assume that the viewer is familiar with Javascript. Not a good sign.
+
+To fetch dependencies:
+"mix deps.get"
+
+mix.exs file is like project.clj or pom.xml or build.gradle
+This section:
+  # Run "mix help compile.app" to learn about applications.
+  def application do
+    [
+      extra_applications: [:logger],
+      mod: {PluralsightTweet.Application, []}
+    ]
+  end
+refers to a file in project:
+pluralsight_tweet/lib/pluralsight_tweet/application.ex
+It starts with this line:
+defmodule PluralsightTweet.Application do
+So I guess "def start" is like "main" for C/C++/Java/Groovy/Kotlin
+It is our supervisor
+
+In our app, we will read file
+https://hexdocs.pm/elixir/File.html#read/1
+https://hexdocs.pm/elixir/File.html#read!/1
+Funcs without ! will return tuple, with  ! return error
+read: Returns {:ok, binary}, where binary is a binary data object that contains the contents of path, or {:error, reason} if an error occurs.
+read!: Returns a binary with the contents of the given filename, or raises a File.Error exception if an error occurs.
+So I guess the versions without ! are like Go, and less likely to crash.
+
+We made a sample file to read in. In project directory, type:
+"iex -S mix"
+iex(2)> cd("lib/pluralsight_tweet")
+/home/ericm/github/elixir_apps/pluralsight_tweet/lib/pluralsight_tweet
+iex(3)> PluralsightTweet.FileReader.get_strings_to_tweet("sample.txt")
+"line 1\nline 2\n"
+It would be great if iex had some sort of autocomplete
+He uses an operator: "|>"
+I REALLY hate operators. Perl, Scala: disasters.
+Anyway, it is like Unix pipe
+
+Recompile:
+iex(4)> r(PluralsightTweet.FileReader)
+warning: redefining module PluralsightTweet.FileReader (current version loaded from /home/ericm/github/elixir_apps/pluralsight_tweet/_build/dev/lib/pluralsight_tweet/ebin/Elixir.PluralsightTweet.FileReader.beam)
+  file_reader.ex:1
+
+{:reloaded, PluralsightTweet.FileReader, [PluralsightTweet.FileReader]}
+iex(5)> PluralsightTweet.FileReader.get_strings_to_tweet("sample.txt")
+["line 1", "line 2", ""]
+iex(6)> 
+
+Behaviours in Elixir are like interfaces in other languages: they define behavior that someone else can implement
+
+
+Looking at processes in iex:
+iex(2)> Process.whereis(:tweet_server)
+#PID<0.265.0>
+iex(3)> Process.whereis(:tweet_server) |> Process.exit(:kill)
+true
+iex(4)> Process.whereis(:tweet_server)
+#PID<0.269.0>
+
+You can call with "mix run --no-halt"
 
 
