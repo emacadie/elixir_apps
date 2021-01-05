@@ -586,4 +586,29 @@ iex(4)> Process.whereis(:tweet_server)
 
 You can call with "mix run --no-halt"
 
+Testing:
+The library used is ExUnit
+"mix test"
+Running it the first time took a while
+instead of "def", we use "test"
+We can run some tests by adding a tag:
+@tag watching: true
+Then you can run those tests like this:
+mix test --only watching
+And you could also do this:
+mix test --exclude watching
+You can also do some configuring in test/test_helper.exs 
+ExUnit.configure exclude: [watching: true]
+
+Filtering the strings:
+  def pick_string(str) do
+    str
+    |> String.split("\n")
+    |> Enum.map(&String.trim/1)
+    |> Enum.filter(&String.length(&1) <= 140)
+    |> Enum.random()
+  end
+    # you could do this:
+    # |> Enum.filter(fn str -> String.length(str) <= 140 end)
+
 
