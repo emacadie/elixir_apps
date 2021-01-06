@@ -611,4 +611,64 @@ Filtering the strings:
     # you could do this:
     # |> Enum.filter(fn str -> String.length(str) <= 140 end)
 
+Did he go over the difference between "use" and "import"? I don't think so.
+
+You can add documentation to a file
+use the doc tag, three quotes, put in your text, close with three quotes
+@doc """
+Insert profound thoughts here.
+"""
+If you have iex commands in the doc, those will be run as part of the tests 
+To do that, you need to add this to the test for the module:
+doctest PluralsightTweet.FileReader
+
+Sometimes test Will not return a line longer than 140 char fails, sometimes not. I am not clear why.
+
+Review:
+Types: Strings, Integers, tuples, atoms
+Modules and functions: Modules contain related functions (like classes, but with no data)
+Module directives
+Pattern matching
+Guard clauses
+First class functions
+
+Control flow: if/cond/case
+recursion
+
+Ecosystem: mix, hex
+
+Supervision
+GenServer
+
+Testing
+Doc tests were new, but it can keep docs up to date.
+
+Reference websites:
+https://github.com/itsgreggreg/elixir_quick_reference
+https://github.com/h4cc/awesome-elixir -> alphabetical
+https://github.com/christopheradams/elixir_style_guide - he has a different URL for this, I guess there are a few out there
+https://github.com/lexmag/elixir-style-guide - from 2018
+Has quote: 
+A programmer does not primarily write code; rather, he primarily writes to another programmer about his problem solution. The understanding of this fact is the final step in his maturation as technician.
+— What a Programmer Does, 1967
+
+Use "mix credo" to check your code.
+https://github.com/rrrene/credo
+
+https://exercism.io/ - don't program C# in Elixir
+Has problems in many langs
+
+Elixir has slack channels
+Elixirweekly.net
+Elixirstatus.com
+#MyElixirStatus on Twitter
+@ElixirStatus
+@ElixirLang
+@ElixirFountain - also a podcast
+Elixirconf.com - also for Phoenix
+
+
+
+
+
 

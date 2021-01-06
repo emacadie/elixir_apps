@@ -1,3 +1,2 @@
 The radical view: Computer programs have become too large and complex to encompass in a human mind. Therefore, the job of computer science education
 short line
-

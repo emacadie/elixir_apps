@@ -1,4 +1,12 @@
 defmodule PluralsightTweet.FileReader do
+
+  @doc """
+  This function takes a path to a file, reads the file, and 
+  calls pick_string.
+  
+  iex> PluralsightTweet.FileReader.get_strings_to_tweet("priv/test/too_long.txt")
+  "short line"
+  """
   def get_strings_to_tweet(path) do
     File.read!(path)
     |> pick_string
@@ -13,4 +21,6 @@ defmodule PluralsightTweet.FileReader do
   end
 
 end
+
+
 
